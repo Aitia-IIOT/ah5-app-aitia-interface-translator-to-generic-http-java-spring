@@ -1,0 +1,37 @@
+{"properties": [
+  {
+    "name": "service.registry.address",
+    "type": "java.lang.String",
+    "description": "A description for 'service.registry.address'"
+  },
+  {
+    "name": "service.registry.port",
+    "type": "java.lang.Integer",
+    "description": "A description for 'service.registry.port'"
+  },
+  {
+    "name": "domain.name",
+    "type": "java.lang.String",
+    "description": "A description for 'domain.name'"
+  },
+  {
+    "name": "authentication.policy",
+    "type": "eu.arrowhead.common.http.filter.authentication.AuthenticationPolicy",
+    "description": "A description for 'authentication.policy'"
+  },
+  {
+    "name": "enable.authorization",
+    "type": "java.lang.Boolean",
+    "description": "A description for 'enable.authorization'"
+  },
+  {
+    "name": "log.all.request.and.response",
+    "type": "java.lang.Boolean",
+    "description": "A description for 'log.all.request.and.response'"
+  },
+  {
+    "name": "disable.hostname.verifier",
+    "type": "java.lang.Boolean",
+    "description": "A description for 'disable.hostname.verifier'"
+  }
+]}
