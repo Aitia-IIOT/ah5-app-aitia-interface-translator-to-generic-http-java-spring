@@ -2,6 +2,7 @@ package ai.aitia.arrowhead.it2generichttp;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import ai.aitia.arrowhead.Constants;
@@ -15,6 +16,12 @@ public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
 
 	//=================================================================================================
 	// members
+
+	@Value(InterfaceTranslatorToGenericHTTPConstants.$ENABLE_AUTHORIZATION_WD)
+	private boolean authorizationEnabled;
+
+	@Value(InterfaceTranslatorToGenericHTTPConstants.$TOKEN_ENCRYPTION_KEY)
+	private String tokenEncryptionKey;
 
 	private SystemModel systemModel;
 
@@ -50,5 +57,15 @@ public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
 	public List<ServiceModel> getServices() {
 		// TODO implement
 		return List.of();
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	public boolean shouldTokenUsed() {
+		return AuthenticationPolicy.CERTIFICATE != getAuthenticationPolicy() && authorizationEnabled;
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	public String getTokenEncryptionKey() {
+		return tokenEncryptionKey;
 	}
 }
