@@ -15,6 +15,8 @@ import ai.aitia.arrowhead.Constants;
 import ai.aitia.arrowhead.it2generichttp.InterfaceTranslatorToGenericHTTPConstants;
 import ai.aitia.arrowhead.it2generichttp.service.ManagementService;
 import eu.arrowhead.dto.ErrorMessageDTO;
+import eu.arrowhead.dto.ServiceInstanceInterfaceResponseDTO;
+import eu.arrowhead.dto.TranslationBridgeInitializationRequestDTO;
 import eu.arrowhead.dto.TranslationCheckTargetsRequestDTO;
 import eu.arrowhead.dto.TranslationCheckTargetsResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,5 +63,28 @@ public class InterfaceBridgeManagementAPI {
 				+ InterfaceTranslatorToGenericHTTPConstants.HTTP_API_OP_CHECK_TARGETS_PATH;
 
 		return mgmtService.checkTargetsOperation(dto, origin);
+	}
+	
+	//-------------------------------------------------------------------------------------------------
+	@Operation(summary = "Prepares a translation bridge.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_CREATED, description = Constants.SWAGGER_HTTP_201_MESSAGE),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_BAD_REQUEST, description = Constants.SWAGGER_HTTP_400_MESSAGE, content = {
+					@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorMessageDTO.class)) }),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_UNAUTHORIZED, description = Constants.SWAGGER_HTTP_401_MESSAGE, content = {
+					@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorMessageDTO.class)) }),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_FORBIDDEN, description = Constants.SWAGGER_HTTP_403_MESSAGE, content = {
+					@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorMessageDTO.class)) }),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_INTERNAL_SERVER_ERROR, description = Constants.SWAGGER_HTTP_500_MESSAGE, content = {
+					@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorMessageDTO.class)) })
+	})
+	@PostMapping(path = InterfaceTranslatorToGenericHTTPConstants.HTTP_API_OP_INIT_BRIDGE_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ServiceInstanceInterfaceResponseDTO initializeBridge(@RequestBody final TranslationBridgeInitializationRequestDTO dto) {
+		logger.debug("initializeBridge started...");
+
+		final String origin = HttpMethod.POST.name() + " " + InterfaceTranslatorToGenericHTTPConstants.HTTP_API_BRIDGE_MANAGEMENT_PATH
+				+ InterfaceTranslatorToGenericHTTPConstants.HTTP_API_OP_INIT_BRIDGE_PATH;
+
+		return mgmtService.initializeBridgeOperation(dto, origin);
 	}
 }
