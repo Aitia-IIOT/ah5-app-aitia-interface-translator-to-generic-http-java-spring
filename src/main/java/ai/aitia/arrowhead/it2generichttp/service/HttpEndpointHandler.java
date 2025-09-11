@@ -17,4 +17,10 @@ public class HttpEndpointHandler implements EndpointHandler {
 	public void initializeBridge(final NormalizedTranslationBridgeModel model) throws InternalServerError, ExternalServerError {
 		// intentionally do nothing
 	}
+
+	//-------------------------------------------------------------------------------------------------
+	@Override
+	public void abortBridge(final NormalizedTranslationBridgeModel model) throws InternalServerError, ExternalServerError {
+		// intentionally do nothing
+	}
 }

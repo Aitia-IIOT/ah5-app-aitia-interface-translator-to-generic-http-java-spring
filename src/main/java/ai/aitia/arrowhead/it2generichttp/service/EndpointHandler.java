@@ -11,4 +11,7 @@ public interface EndpointHandler {
 
 	//-------------------------------------------------------------------------------------------------
 	public void initializeBridge(final NormalizedTranslationBridgeModel model) throws InternalServerError, ExternalServerError;
+
+	//-------------------------------------------------------------------------------------------------
+	public void abortBridge(final NormalizedTranslationBridgeModel model) throws InternalServerError, ExternalServerError;
 }

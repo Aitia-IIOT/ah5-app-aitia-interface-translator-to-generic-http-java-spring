@@ -63,10 +63,13 @@ public class ManagementFilter extends ArrowheadFilter {
 	@Autowired
 	private ServiceDefinitionNameNormalizer serviceDefNormalizer;
 
+	@Resource(name = Constants.ARROWHEAD_CONTEXT)
+	private Map<String, Object> arrowheadContext;
+
 	private final Logger logger = LogManager.getLogger(this.getClass());
 
-	@Resource(name = Constants.ARROWHEAD_CONTEXT)
-	protected Map<String, Object> arrowheadContext;
+	//=================================================================================================
+	// assistant methods
 
 	//-------------------------------------------------------------------------------------------------
 	@Override

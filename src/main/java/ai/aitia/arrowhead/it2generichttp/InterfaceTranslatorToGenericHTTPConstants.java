@@ -21,6 +21,9 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 	public static final String HTTP_API_BRIDGE_MANAGEMENT_PATH = HTTP_API_BASE_PATH + "/bridge/mgmt";
 	public static final String HTTP_API_OP_CHECK_TARGETS_PATH = "/check-targets";
 	public static final String HTTP_API_OP_INIT_BRIDGE_PATH = "/initialize-bridge";
+	public static final String HTTP_API_OP_ABORT_BRIDGE_PATH = "/abort-bridge";
+	public static final String HTTP_PARAM_BRIDGE_ID = "{bridgeId}";
+	public static final String HTTP_API_OP_ABORT_BRIDGE_PATH_WITH_PARAM = HTTP_API_OP_ABORT_BRIDGE_PATH + "/" + HTTP_PARAM_BRIDGE_ID;
 	public static final String HTTP_PARAM_PATH_ID = "{pathId}";
 	public static final String HTTP_API_DYNAMIC_PATH = HTTP_API_BASE_PATH + "/dynamic";
 	public static final String HTTP_API_DYNAMIC_PATH_WITH_PARAM = HTTP_API_DYNAMIC_PATH  + "/" + HTTP_PARAM_PATH_ID;

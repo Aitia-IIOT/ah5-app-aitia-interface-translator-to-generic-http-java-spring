@@ -4,7 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +29,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(InterfaceTranslatorToGenericHTTPConstants.HTTP_API_BRIDGE_MANAGEMENT_PATH)
@@ -64,7 +69,7 @@ public class InterfaceBridgeManagementAPI {
 
 		return mgmtService.checkTargetsOperation(dto, origin);
 	}
-	
+
 	//-------------------------------------------------------------------------------------------------
 	@Operation(summary = "Prepares a translation bridge.")
 	@ApiResponses(value = {
@@ -86,5 +91,33 @@ public class InterfaceBridgeManagementAPI {
 				+ InterfaceTranslatorToGenericHTTPConstants.HTTP_API_OP_INIT_BRIDGE_PATH;
 
 		return mgmtService.initializeBridgeOperation(dto, origin);
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	@Operation(summary = "Aborts a translation bridge")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_OK, description = Constants.SWAGGER_HTTP_200_MESSAGE),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_NO_CONTENT, description = Constants.SWAGGER_HTTP_204_MESSAGE),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_BAD_REQUEST, description = Constants.SWAGGER_HTTP_400_MESSAGE, content = {
+					@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorMessageDTO.class)) }),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_UNAUTHORIZED, description = Constants.SWAGGER_HTTP_401_MESSAGE, content = {
+					@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorMessageDTO.class)) }),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_FORBIDDEN, description = Constants.SWAGGER_HTTP_403_MESSAGE, content = {
+					@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorMessageDTO.class)) }),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_INTERNAL_SERVER_ERROR, description = Constants.SWAGGER_HTTP_500_MESSAGE, content = {
+					@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorMessageDTO.class)) }),
+			@ApiResponse(responseCode = Constants.HTTP_STATUS_SERVICE_UNAVAILABLE, description = Constants.SWAGGER_HTTP_503_MESSAGE, content = {
+					@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorMessageDTO.class)) })
+	})
+	@DeleteMapping(path = InterfaceTranslatorToGenericHTTPConstants.HTTP_API_OP_ABORT_BRIDGE_PATH_WITH_PARAM)
+	public ResponseEntity<Void> abortBridge(final HttpServletRequest httpServletRequest, @PathVariable(required = true) final String bridgeId) {
+		logger.debug("abortBridge started");
+
+		final String origin = HttpMethod.DELETE.name() + " " + InterfaceTranslatorToGenericHTTPConstants.HTTP_API_BRIDGE_MANAGEMENT_PATH
+				+ InterfaceTranslatorToGenericHTTPConstants.HTTP_API_OP_ABORT_BRIDGE_PATH_WITH_PARAM.replace(InterfaceTranslatorToGenericHTTPConstants.HTTP_PARAM_BRIDGE_ID, bridgeId);
+
+		final boolean result = mgmtService.abortBridgeOperation(bridgeId, origin);
+
+		return new ResponseEntity<Void>(result ? HttpStatus.OK : HttpStatus.NO_CONTENT);
 	}
 }

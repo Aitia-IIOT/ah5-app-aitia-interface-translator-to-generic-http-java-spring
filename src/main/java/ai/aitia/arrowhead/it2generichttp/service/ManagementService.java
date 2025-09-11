@@ -3,6 +3,7 @@ package ai.aitia.arrowhead.it2generichttp.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -104,6 +105,21 @@ public class ManagementService {
 		} catch (final ExternalServerError ex) {
 			throw new ExternalServerError(ex.getMessage(), origin);
 		}
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	public boolean abortBridgeOperation(final String bridgeId, final String origin) {
+		logger.debug("abortBridgeOperation started...");
+		Assert.isTrue(!Utilities.isEmpty(origin), "origin is missing");
+
+		final UUID normalized = validator.validateAndNormalizeBridgeId(bridgeId, origin);
+		final NormalizedTranslationBridgeModel model = bridgeStore.removeByBridgeId(normalized);
+		if (model != null) {
+			final EndpointHandler handler = getEndpointHandlerOfInterface(model.inputInterface());
+			handler.abortBridge(model);
+		}
+
+		return model != null;
 	}
 
 	//=================================================================================================

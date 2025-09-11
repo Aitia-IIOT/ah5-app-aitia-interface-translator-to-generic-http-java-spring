@@ -80,6 +80,22 @@ public class ManagementServiceValidation {
 		return normalized;
 	}
 
+	//-------------------------------------------------------------------------------------------------
+	public UUID validateAndNormalizeBridgeId(final String bridgeId, final String origin) {
+		logger.debug("validateAndNormalizeBridgeId started...");
+		Assert.isTrue(!Utilities.isEmpty(origin), "origin is empty");
+
+		if (Utilities.isEmpty(bridgeId)) {
+			throw new InvalidParameterException("Bridge identifier is missing", origin);
+		}
+
+		try {
+			return UUID.fromString(bridgeId.trim());
+		} catch (final IllegalArgumentException __) {
+			throw new InvalidParameterException("Bridge identifier is invalid", origin);
+		}
+	}
+
 	//=================================================================================================
 	// assistant methods
 
