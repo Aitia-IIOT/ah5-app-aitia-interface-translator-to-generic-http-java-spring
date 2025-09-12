@@ -169,6 +169,10 @@ public class ManagementServiceValidation {
 			validateDataModelTranslator(dto.resultDataModelTranslator(), origin);
 		}
 
+		if (Utilities.isEmpty(dto.targetInterface())) {
+			throw new InvalidParameterException("Target interface name is missing", origin);
+		}
+
 		if (Utilities.isEmpty(dto.targetInterfaceProperties())) {
 			throw new InvalidParameterException("targetInterfaceProperties is missing", origin);
 		}
@@ -195,6 +199,7 @@ public class ManagementServiceValidation {
 				dataModelIdValidator.validateDataModelIdentifier(normalized.resultDataModelTranslator().toModelId());
 			}
 
+			interfaceTemplateNameValidator.validateInterfaceTemplateName(normalized.targetInterface());
 			serviceOpValidator.validateServiceOperationName(normalized.operation());
 		} catch (final InvalidParameterException ex) {
 			throw new InvalidParameterException(ex.getMessage(), origin);
@@ -259,6 +264,7 @@ public class ManagementServiceValidation {
 				interfaceTemplateNameNormalizer.normalize(dto.inputInterface()),
 				normalizeDataModelTranslator(dto.inputDataModelTranslator()),
 				normalizeDataModelTranslator(dto.resultDataModelTranslator()),
+				interfaceTemplateNameNormalizer.normalize(dto.targetInterface()),
 				dto.targetInterfaceProperties(),
 				serviceOpNormalizer.normalize(dto.operation()),
 				Utilities.isEmpty(dto.authorizationToken()) ? null : dto.authorizationToken().trim(),

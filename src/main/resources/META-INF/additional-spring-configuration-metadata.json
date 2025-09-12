@@ -48,5 +48,15 @@
     "name": "http.client.socket.timeout",
     "type": "java.lang.Long",
     "description": "A description for 'http.client.socket.timeout'"
+  },
+  {
+    "name": "data.model.translator.get.result.tries",
+    "type": "java.lang.Integer",
+    "description": "A description for 'data.model.translator.get.result.tries'"
+  },
+  {
+    "name": "data.model.translator.get.result.wait",
+    "type": "java.lang.Long",
+    "description": "A description for 'data.model.translator.get.result.wait'"
   }
 ]}

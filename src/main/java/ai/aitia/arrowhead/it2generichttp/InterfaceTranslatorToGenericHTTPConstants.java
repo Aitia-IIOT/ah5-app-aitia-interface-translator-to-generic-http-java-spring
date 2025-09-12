@@ -15,6 +15,10 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 	public static final String $ENABLE_AUTHORIZATION_WD = "${" + ENABLE_AUTHORIZATION + ":" + InterfaceTranslatorToGenericHTTPDefaults.ENABLE_AUTHORIZATION_DEFAULT + "}";
 	public static final String TOKEN_ENCRYPTION_KEY = "token.encryption.key";
 	public static final String $TOKEN_ENCRYPTION_KEY = "${" + TOKEN_ENCRYPTION_KEY + ":}";
+	public static final String DATA_MODEL_TRANSLATOR_GET_RESULT_TRIES = "data.model.translator.get.result.tries";
+	public static final String $DATA_MODEL_TRANSLATOR_GET_RESULT_TRIES_WD = "${" + DATA_MODEL_TRANSLATOR_GET_RESULT_TRIES + ":10}";
+	public static final String DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT = "data.model.translator.get.result.wait";
+	public static final String $DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT_WD = "${" + DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT + ":1000}";
 
 	public static final String HTTP_API_BASE_PATH = "/interface/translator";
 	public static final String HTTP_API_MONITOR_PATH = HTTP_API_BASE_PATH + "/monitor";
@@ -26,7 +30,7 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 	public static final String HTTP_API_OP_ABORT_BRIDGE_PATH_WITH_PARAM = HTTP_API_OP_ABORT_BRIDGE_PATH + "/" + HTTP_PARAM_BRIDGE_ID;
 	public static final String HTTP_PARAM_PATH_ID = "{pathId}";
 	public static final String HTTP_API_DYNAMIC_PATH = HTTP_API_BASE_PATH + "/dynamic";
-	public static final String HTTP_API_DYNAMIC_PATH_WITH_PARAM = HTTP_API_DYNAMIC_PATH  + "/" + HTTP_PARAM_PATH_ID;
+	public static final String HTTP_API_DYNAMIC_PATH_WITH_PARAM = HTTP_API_DYNAMIC_PATH + "/" + HTTP_PARAM_PATH_ID;
 
 	public static final String POLICY_TRANSLATION_BRIDGE_TOKEN = "TRANSLATION_BRIDGE_TOKEN";
 

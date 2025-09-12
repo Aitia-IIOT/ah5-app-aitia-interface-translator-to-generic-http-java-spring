@@ -1,0 +1,99 @@
+package ai.aitia.arrowhead.it2generichttp.service.engine;
+
+import java.security.InvalidParameterException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.util.Pair;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.web.util.UriComponents;
+
+import ai.aitia.arrowhead.Constants;
+import eu.arrowhead.common.Utilities;
+import eu.arrowhead.common.exception.ArrowheadException;
+import eu.arrowhead.common.http.HttpService;
+import eu.arrowhead.common.http.HttpUtilities;
+import eu.arrowhead.common.http.model.HttpInterfaceModel;
+import eu.arrowhead.common.http.model.HttpOperationModel;
+
+@Service
+public class ProviderDriver {
+
+	//=================================================================================================
+	// members
+
+	private final Logger logger = LogManager.getLogger(this.getClass());
+
+	@Autowired
+	private HttpService httpService;
+
+	//=================================================================================================
+	// methods
+
+	//-------------------------------------------------------------------------------------------------
+	@SuppressWarnings("unchecked")
+	public Pair<HttpStatus, Optional<byte[]>> callOperation(final String operation, final String targetInterface, final Map<String, Object> targetInterfaceProperties, final byte[] payload, final String authorizationToken) {
+		logger.debug("callOperation started...");
+		Assert.isTrue(!Utilities.isEmpty(operation), "operation is missing");
+		Assert.isTrue(!Utilities.isEmpty(targetInterfaceProperties), "Interface properties is missing");
+
+		HttpMethod method = null;
+		String operationPath = null;
+		final String scheme = targetInterface.equals(Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME) ? Constants.HTTPS : Constants.HTTP;
+		final String host = ((List<String>) targetInterfaceProperties.get(HttpInterfaceModel.PROP_NAME_ACCESS_ADDRESSES)).get(0);
+		final int port = (int) targetInterfaceProperties.get(HttpInterfaceModel.PROP_NAME_ACCESS_PORT);
+		final String basePath = targetInterfaceProperties.get(HttpInterfaceModel.PROP_NAME_BASE_PATH).toString();
+		if (targetInterfaceProperties.containsKey(HttpInterfaceModel.PROP_NAME_OPERATIONS)
+				&& (targetInterfaceProperties.get(HttpInterfaceModel.PROP_NAME_OPERATIONS) instanceof final Map operationsMap)
+				&& operationsMap.containsKey(operation)) {
+			final Object value = operationsMap.get(operation);
+			try {
+				final HttpOperationModel model = Utilities.fromJson(Utilities.toJson(value), HttpOperationModel.class);
+				method = HttpMethod.valueOf(model.method());
+				operationPath = model.path();
+			} catch (final ArrowheadException ex) {
+				throw new InvalidParameterException("Essential information about the target operation is missing");
+			}
+		}
+
+		if (method == null || Utilities.isEmpty(operationPath)) {
+			throw new InvalidParameterException("Essential information about the target operation is missing");
+		}
+
+		final UriComponents uri = HttpUtilities.createURI(scheme, host, port, basePath + operationPath);
+
+		// TODO: I'm not sure this is works
+		final ByteArrayResource actualPayload = payload == null ? null : new ByteArrayResource(payload);
+
+		final Map<String, String> headers = new HashMap<>(1);
+		if (!Utilities.isEmpty(authorizationToken)) {
+			headers.put(HttpHeaders.AUTHORIZATION, Constants.AUTHORIZATION_SCHEMA + " " + authorizationToken);
+		}
+
+		final ByteArrayResource response = httpService.sendRequest(
+				uri,
+				method,
+				ByteArrayResource.class,
+				actualPayload,
+				null,
+				headers);
+
+		// TODO: need a version of sendRequest that returns the status code as well
+		// (maybe this will help: https://stackoverflow.com/questions/67943438/get-status-code-of-spring-webclient-request)
+		final HttpStatus status = HttpStatus.OK;
+
+		return response == null || response.contentLength() == 0
+				? Pair.of(status, Optional.empty())
+				: Pair.of(status, Optional.of(response.getByteArray()));
+	}
+}
