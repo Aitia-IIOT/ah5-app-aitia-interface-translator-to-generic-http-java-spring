@@ -23,16 +23,13 @@ public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
 	@Value(InterfaceTranslatorToGenericHTTPConstants.$TOKEN_ENCRYPTION_KEY)
 	private String tokenEncryptionKey;
 
+	@Value(InterfaceTranslatorToGenericHTTPConstants.$TARGET_INTERFACE_SSL_ENABLED)
+	private Boolean targetInterfaceSslEanbled;
+
 	private SystemModel systemModel;
 
 	//=================================================================================================
 	// methods
-
-	//-------------------------------------------------------------------------------------------------
-	@Override
-	public String getSystemName() {
-		return InterfaceTranslatorToGenericHTTPConstants.SYSTEM_NAME;
-	}
 
 	//-------------------------------------------------------------------------------------------------
 	@Override
@@ -57,6 +54,21 @@ public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
 	public List<ServiceModel> getServices() {
 		// TODO implement
 		return List.of();
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	public String getTargetInterface() {
+		if (targetInterfaceSslEanbled != null) {
+			return targetInterfaceSslEanbled
+					? Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME
+					: Constants.GENERIC_HTTP_INTERFACE_TEMPLATE_NAME;
+		}
+
+		// if not defined specifically, then the system's SSL settings matters
+		return isSslEnabled()
+				? Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME
+				: Constants.GENERIC_HTTP_INTERFACE_TEMPLATE_NAME;
+
 	}
 
 	//-------------------------------------------------------------------------------------------------

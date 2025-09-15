@@ -114,7 +114,7 @@ public class ManagementFilter extends ArrowheadFilter {
 
 		final String clientName = systemNameNormalizer.normalize(SecurityUtilities.getClientNameFromClientCN(requesterData.commonName()));
 
-		return Constants.SYS_NAME_TRANSLATIONMANAGER.equals(clientName);
+		return Constants.SYS_NAME_TRANSLATION_MANAGER.equals(clientName);
 	}
 
 	//-------------------------------------------------------------------------------------------------
@@ -159,8 +159,8 @@ public class ManagementFilter extends ArrowheadFilter {
 			final String target = serviceDefNormalizer.normalize(contentSplit[3]);
 			final String targetType = contentSplit[5].trim().toUpperCase();
 
-			return Constants.SYS_NAME_TRANSLATIONMANAGER.equals(consumer)
-					&& InterfaceTranslatorToGenericHTTPConstants.SYSTEM_NAME.equals(provider)
+			return Constants.SYS_NAME_TRANSLATION_MANAGER.equals(consumer)
+					&& sysInfo.getSystemName().equals(provider)
 					&& Constants.SERVICE_DEF_INTERFACE_BRIDGE_MANAGEMENT.equals(target)
 					&& AuthorizationTargetType.SERVICE_DEF.name().equals(targetType);
 		} catch (final InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException ex) {

@@ -60,7 +60,7 @@ public class ReportThread extends Thread {
 			httpService.consumeService(
 					Constants.SERVICE_DEF_TRANSLATION_REPORT,
 					Constants.SERVICE_OP_REPORT,
-					Constants.SYS_NAME_TRANSLATIONMANAGER,
+					Constants.SYS_NAME_TRANSLATION_MANAGER,
 					Void.TYPE,
 					request);
 		} else {

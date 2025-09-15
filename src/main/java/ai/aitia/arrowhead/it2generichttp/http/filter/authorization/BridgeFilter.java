@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 
 import ai.aitia.arrowhead.Constants;
 import ai.aitia.arrowhead.it2generichttp.InterfaceTranslatorToGenericHTTPConstants;
@@ -27,7 +28,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-//@Component
+@Component
 public class BridgeFilter extends ArrowheadFilter {
 
 	//=================================================================================================

@@ -1,6 +1,8 @@
 package ai.aitia.arrowhead.it2generichttp.service.model;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -105,5 +107,22 @@ public class BridgeStore {
 
 			return model;
 		}
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	public List<NormalizedTranslationBridgeModel> getBridgeModelsWithOlderActivityThan(final ZonedDateTime threshold) {
+		logger.debug("BridgeStore.getBridgeModelsWithOlderActivityThan started...");
+		Assert.notNull(threshold, "threshold is null");
+
+		final List<NormalizedTranslationBridgeModel> result = new ArrayList<>();
+		synchronized (LOCK) {
+			bridgeIdToTimestamp.forEach((id, timestamp) -> {
+				if (timestamp.isBefore(threshold)) {
+					result.add(bridgeIdToModel.get(id));
+				}
+			});
+		}
+
+		return result;
 	}
 }

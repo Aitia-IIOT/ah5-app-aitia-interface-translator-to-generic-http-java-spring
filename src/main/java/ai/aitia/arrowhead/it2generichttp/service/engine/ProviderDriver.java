@@ -13,7 +13,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.util.UriComponents;
@@ -42,7 +41,12 @@ public class ProviderDriver {
 
 	//-------------------------------------------------------------------------------------------------
 	@SuppressWarnings("unchecked")
-	public Pair<HttpStatus, Optional<byte[]>> callOperation(final String operation, final String targetInterface, final Map<String, Object> targetInterfaceProperties, final byte[] payload, final String authorizationToken) {
+	public Pair<Integer, Optional<byte[]>> callOperation(
+			final String operation,
+			final String targetInterface,
+			final Map<String, Object> targetInterfaceProperties,
+			final byte[] payload,
+			final String authorizationToken) {
 		logger.debug("callOperation started...");
 		Assert.isTrue(!Utilities.isEmpty(operation), "operation is missing");
 		Assert.isTrue(!Utilities.isEmpty(targetInterfaceProperties), "Interface properties is missing");
@@ -80,7 +84,7 @@ public class ProviderDriver {
 			headers.put(HttpHeaders.AUTHORIZATION, Constants.AUTHORIZATION_SCHEMA + " " + authorizationToken);
 		}
 
-		final ByteArrayResource response = httpService.sendRequest(
+		final Pair<Integer, Optional<ByteArrayResource>> response = httpService.sendRequestAndReturnStatus(
 				uri,
 				method,
 				ByteArrayResource.class,
@@ -88,12 +92,11 @@ public class ProviderDriver {
 				null,
 				headers);
 
-		// TODO: need a version of sendRequest that returns the status code as well
-		// (maybe this will help: https://stackoverflow.com/questions/67943438/get-status-code-of-spring-webclient-request)
-		final HttpStatus status = HttpStatus.OK;
+		final Integer status = response.getFirst();
+		final Optional<ByteArrayResource> optBody = response.getSecond();
 
-		return response == null || response.contentLength() == 0
-				? Pair.of(status, Optional.empty())
-				: Pair.of(status, Optional.of(response.getByteArray()));
+		return Pair.of(
+				status,
+				optBody.isEmpty() || optBody.get().contentLength() == 0 ? Optional.empty() : Optional.of(optBody.get().getByteArray()));
 	}
 }

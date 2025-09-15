@@ -38,10 +38,6 @@ public class ManagementService {
 	//=================================================================================================
 	// members
 
-	private final List<String> supportedInterfaces = List.of(
-			Constants.GENERIC_HTTP_INTERFACE_TEMPLATE_NAME,
-			Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME); // TODO: update with MQTT
-
 	private final Logger logger = LogManager.getLogger(this.getClass());
 
 	@Autowired
@@ -129,7 +125,7 @@ public class ManagementService {
 	private boolean isAppropriateInterface(final ServiceInstanceInterfaceResponseDTO intf, final String targetOperation) {
 		logger.debug("isAppropriateInterface started...");
 
-		if (supportedInterfaces.contains(intf.templateName())) {
+		if (sysInfo.getTargetInterface().equals(intf.templateName())) {
 			switch (intf.templateName()) {
 			case Constants.GENERIC_HTTP_INTERFACE_TEMPLATE_NAME:
 			case Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME:
