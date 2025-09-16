@@ -1,9 +1,7 @@
 package ai.aitia.arrowhead.it2generichttp.quartz;
 
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,24 +10,14 @@ import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import ai.aitia.arrowhead.Constants;
 import ai.aitia.arrowhead.it2generichttp.InterfaceTranslatorToGenericHTTPConstants;
 import ai.aitia.arrowhead.it2generichttp.service.model.BridgeStore;
 import ai.aitia.arrowhead.it2generichttp.service.model.NormalizedTranslationBridgeModel;
-import eu.arrowhead.common.SystemInfo;
 import eu.arrowhead.common.Utilities;
-import eu.arrowhead.common.exception.ArrowheadException;
-import eu.arrowhead.common.exception.AuthException;
-import eu.arrowhead.common.http.ArrowheadHttpService;
-import eu.arrowhead.dto.IdentityLoginResponseDTO;
-import eu.arrowhead.dto.IdentityRequestDTO;
 import eu.arrowhead.dto.TranslationReportRequestDTO;
 import eu.arrowhead.dto.enums.TranslationBridgeEventState;
 import jakarta.annotation.Resource;

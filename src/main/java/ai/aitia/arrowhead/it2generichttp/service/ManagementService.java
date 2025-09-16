@@ -197,7 +197,7 @@ public class ManagementService {
 		return new ServiceInstanceInterfaceResponseDTO(
 				model.inputInterface(),
 				calculateProtocol(model.inputInterface()),
-				InterfaceTranslatorToGenericHTTPConstants.POLICY_TRANSLATION_BRIDGE_TOKEN,
+				InterfaceTranslatorToGenericHTTPConstants.POLICY_TRANSLATION_BRIDGE_TOKEN_AUTH,
 				calculateInterfaceProperties(model));
 	}
 

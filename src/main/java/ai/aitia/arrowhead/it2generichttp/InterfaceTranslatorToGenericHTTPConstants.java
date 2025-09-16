@@ -7,6 +7,8 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 
 	public static final String SYSTEM_VERSION = "1.0.0";
 
+	public static final String VERSION_INTERFACE_BRIDGE_MANAGEMENT = "1.0.0";
+
 	public static final String AES_CBC_ALGORITHM_IV_BASED = "AES/CBC/PKCS5Padding"; // With initialization vector
 	public static final String KEY_INITIALIZATION_VECTOR = "authorization-initialization-vector";
 
@@ -37,7 +39,7 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 	public static final String HTTP_API_DYNAMIC_PATH = HTTP_API_BASE_PATH + "/dynamic";
 	public static final String HTTP_API_DYNAMIC_PATH_WITH_PARAM = HTTP_API_DYNAMIC_PATH + "/" + HTTP_PARAM_PATH_ID;
 
-	public static final String POLICY_TRANSLATION_BRIDGE_TOKEN = "TRANSLATION_BRIDGE_TOKEN";
+	public static final String POLICY_TRANSLATION_BRIDGE_TOKEN_AUTH = "TRANSLATION_BRIDGE_TOKEN_AUTH";
 
 	public static final String REPORT_QUEUE = "reportQueue";
 	public static final String BRIDGE_CLOSING_TRIGGER = "bridgeClosingTrigger";
