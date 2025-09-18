@@ -15,6 +15,7 @@ import eu.arrowhead.common.http.model.HttpOperationModel;
 import eu.arrowhead.common.model.InterfaceModel;
 import eu.arrowhead.common.model.ServiceModel;
 import eu.arrowhead.common.model.SystemModel;
+import eu.arrowhead.dto.enums.ServiceInterfacePolicy;
 
 @Component
 public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
@@ -98,6 +99,11 @@ public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
 		return tokenEncryptionKey;
 	}
 
+	//-------------------------------------------------------------------------------------------------
+	public boolean isAuthorizationEnabled() {
+		return authorizationEnabled;
+	}
+
 	//=================================================================================================
 	// assistant methods
 
@@ -121,6 +127,7 @@ public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
 				.build();
 
 		return new HttpInterfaceModel.Builder(templateName, getDomainAddress(), getServerPort())
+				.policy(ServiceInterfacePolicy.BASE64_SELF_CONTAINED_TOKEN_AUTH)
 				.basePath(InterfaceTranslatorToGenericHTTPConstants.HTTP_API_BRIDGE_MANAGEMENT_PATH)
 				.operation(Constants.SERVICE_OP_INTERFACE_TRANSLATOR_CHECK_TARGETS, check)
 				.operation(Constants.SERVICE_OP_INTERFACE_TRANSLATOR_INIT_BRIDGE, init)
