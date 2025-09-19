@@ -102,12 +102,12 @@ public class DynamicService {
 				sendReport(model, TranslationBridgeEventState.EXTERNAL_ERROR, ex.getMessage());
 			}
 
-			bridgeStore.removeByBridgeId(model.bridgeId());
+//			bridgeStore.removeByBridgeId(model.bridgeId()); // TODO: uncomment this
 			throw ex;
 		} catch (final Exception ex) {
 			sendReport(model, TranslationBridgeEventState.INTERNAL_ERROR, ex.getMessage());
 
-			bridgeStore.removeByBridgeId(model.bridgeId());
+//			bridgeStore.removeByBridgeId(model.bridgeId()); // TODO: uncomment this
 			throw ex;
 		}
 	}

@@ -126,8 +126,12 @@ public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
 				.path(InterfaceTranslatorToGenericHTTPConstants.HTTP_API_OP_ABORT_BRIDGE_PATH)
 				.build();
 
+		final ServiceInterfacePolicy policy = getAuthenticationPolicy() == AuthenticationPolicy.CERTIFICATE
+				? ServiceInterfacePolicy.CERT_AUTH
+				: ServiceInterfacePolicy.BASE64_SELF_CONTAINED_TOKEN_AUTH;
+
 		return new HttpInterfaceModel.Builder(templateName, getDomainAddress(), getServerPort())
-				.policy(ServiceInterfacePolicy.BASE64_SELF_CONTAINED_TOKEN_AUTH)
+				.policy(policy)
 				.basePath(InterfaceTranslatorToGenericHTTPConstants.HTTP_API_BRIDGE_MANAGEMENT_PATH)
 				.operation(Constants.SERVICE_OP_INTERFACE_TRANSLATOR_CHECK_TARGETS, check)
 				.operation(Constants.SERVICE_OP_INTERFACE_TRANSLATOR_INIT_BRIDGE, init)
