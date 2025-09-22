@@ -50,10 +50,11 @@ public class DynamicAPI {
 
 		final String origin = HttpMethod.POST.name() + " " + InterfaceTranslatorToGenericHTTPConstants.HTTP_API_DYNAMIC_PATH_WITH_PARAM
 				.replace(InterfaceTranslatorToGenericHTTPConstants.HTTP_PARAM_PATH_ID, pathId);
+		final String originalContentType = httpServletRequest.getHeader(HttpHeaders.CONTENT_TYPE);
 
 		try {
 			final String payloadBase64 = processor.extractPayload(httpServletRequest);
-			final Pair<Integer, Optional<String>> result = service.doBridgeOperation(pathId, payloadBase64, origin);
+			final Pair<Integer, Optional<String>> result = service.doBridgeOperation(pathId, payloadBase64, originalContentType, origin);
 			handleResponse(httpServletRequest, httpServletResponse, result, origin);
 		} catch (final Throwable t) {
 			handleException(t, httpServletResponse, origin);

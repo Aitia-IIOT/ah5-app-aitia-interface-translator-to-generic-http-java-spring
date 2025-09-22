@@ -13,7 +13,6 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.web.util.UriComponents;
@@ -47,6 +46,7 @@ public class ProviderDriver {
 			final String targetInterface,
 			final Map<String, Object> targetInterfaceProperties,
 			final byte[] payload,
+			final String contentType,
 			final String authorizationToken) {
 		logger.debug("callOperation started...");
 		Assert.isTrue(!Utilities.isEmpty(operation), "operation is missing");
@@ -80,7 +80,7 @@ public class ProviderDriver {
 		final ByteArrayResource actualPayload = payload == null ? null : new ByteArrayResource(payload);
 
 		final Map<String, String> headers = new HashMap<>(2);
-//		headers.put(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_XML_VALUE); // TODO: we have to calculate this somehow
+		headers.put(HttpHeaders.CONTENT_TYPE, contentType);
 		if (!Utilities.isEmpty(authorizationToken)) {
 			headers.put(HttpHeaders.AUTHORIZATION, Constants.AUTHORIZATION_SCHEMA + " " + authorizationToken);
 		}

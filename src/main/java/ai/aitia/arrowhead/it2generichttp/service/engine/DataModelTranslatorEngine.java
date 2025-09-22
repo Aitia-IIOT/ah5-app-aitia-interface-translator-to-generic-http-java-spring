@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -42,7 +43,7 @@ public class DataModelTranslatorEngine {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public String translate(final UUID bridgeId, final TranslationDataModelTranslationDataDescriptorDTO translator, final String input, final Map<String, Object> settings) {
+	public Pair<String, String> translate(final UUID bridgeId, final TranslationDataModelTranslationDataDescriptorDTO translator, final String input, final Map<String, Object> settings) {
 		logger.debug("DataModelTranslatorEngine.translate started...");
 		Assert.notNull(bridgeId, "bridgeId is null");
 		Assert.notNull(translator, "translator is null");
@@ -66,13 +67,15 @@ public class DataModelTranslatorEngine {
 			case PENDING:
 			case IN_PROGRESS:
 				try {
-					Thread.currentThread().wait(wait);
+					Thread.sleep(wait);
 				} catch (final InterruptedException __) {
 					// nothing to do
 				}
 				break;
 			case DONE:
-				return response.result();
+				return Pair.of(
+						response.result(),
+						response.mimeType());
 			case ERROR:
 				throw new ExternalServerError(response.result());
 			default:

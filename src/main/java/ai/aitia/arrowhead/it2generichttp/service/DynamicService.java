@@ -55,12 +55,15 @@ public class DynamicService {
 	// methods
 
 	//-------------------------------------------------------------------------------------------------
-	public Pair<Integer, Optional<String>> doBridgeOperation(final String endpointId, final String payloadBase64, final String origin) {
+	public Pair<Integer, Optional<String>> doBridgeOperation(final String endpointId, final String payloadBase64, final String originalContentType, final String origin) {
 		logger.debug("doBridgeOperation started...");
 		Assert.isTrue(!Utilities.isEmpty(origin), "origin is missing");
 
 		final UUID normalized = validator.validateAndNormalizeEndpointId(endpointId, origin);
 		final NormalizedTranslationBridgeModel model = bridgeStore.getByEndpointId(normalized);
+		final String normalizedOriginalContentType = Utilities.isEmpty(originalContentType)
+				? null
+				: originalContentType.trim();
 
 		// invalid target
 		if (model == null) {
@@ -74,7 +77,7 @@ public class DynamicService {
 
 		try {
 			// translate payload if necessary
-			final byte[] input = handleInputPayload(model, payloadBase64);
+			final Pair<Optional<byte[]>, Optional<String>> inputData = handleInputPayload(model, payloadBase64, normalizedOriginalContentType);
 
 			// checking if bridge is still exists
 			if (!bridgeStore.containsBridgeId(model.bridgeId())) {
@@ -86,7 +89,8 @@ public class DynamicService {
 					model.operation(),
 					model.targetInterface(),
 					model.targetInterfaceProperties(),
-					input,
+					inputData.getFirst().orElse(null),
+					inputData.getSecond().orElse(null),
 					model.authorizationToken());
 
 			validator.crossCheckModelAndResult(model, response.getSecond(), origin);
@@ -102,12 +106,12 @@ public class DynamicService {
 				sendReport(model, TranslationBridgeEventState.EXTERNAL_ERROR, ex.getMessage());
 			}
 
-//			bridgeStore.removeByBridgeId(model.bridgeId()); // TODO: uncomment this
+			bridgeStore.removeByBridgeId(model.bridgeId());
 			throw ex;
 		} catch (final Exception ex) {
 			sendReport(model, TranslationBridgeEventState.INTERNAL_ERROR, ex.getMessage());
 
-//			bridgeStore.removeByBridgeId(model.bridgeId()); // TODO: uncomment this
+			bridgeStore.removeByBridgeId(model.bridgeId());
 			throw ex;
 		}
 	}
@@ -129,23 +133,29 @@ public class DynamicService {
 	}
 
 	//-------------------------------------------------------------------------------------------------
-	private byte[] handleInputPayload(final NormalizedTranslationBridgeModel model, final String payloadBase64) {
+	private Pair<Optional<byte[]>, Optional<String>> handleInputPayload(final NormalizedTranslationBridgeModel model, final String payloadBase64, final String originalContentType) {
 		logger.debug("handleInputPayload started...");
 
 		if (payloadBase64 == null) {
-			return null;
+			return Pair.of(Optional.empty(), Optional.empty());
 		}
 
 		String input = payloadBase64;
+		String contentType = originalContentType;
 		if (model.inputDataModelTranslator() != null) {
-			input = dmEngine.translate(
+			final Pair<String, String> translationResult = dmEngine.translate(
 					model.bridgeId(),
 					model.inputDataModelTranslator(),
 					input,
 					model.interfaceTranslatorSettings());
+
+			input = translationResult.getFirst();
+			contentType = translationResult.getSecond();
 		}
 
-		return Base64.getDecoder().decode(input.getBytes(StandardCharsets.UTF_8));
+		return Pair.of(
+				Optional.of(Base64.getDecoder().decode(input.getBytes(StandardCharsets.UTF_8))),
+				Optional.ofNullable(contentType));
 	}
 
 	//-------------------------------------------------------------------------------------------------
@@ -167,7 +177,7 @@ public class DynamicService {
 					model.bridgeId(),
 					model.resultDataModelTranslator(),
 					output,
-					model.interfaceTranslatorSettings());
+					model.interfaceTranslatorSettings()).getFirst();
 		}
 
 		return output;
