@@ -16,7 +16,8 @@
 	<url>https://github.com/Aitia-IIOT/ah5-app-aitia-interface-translator-to-generic-http-java-spring</url>
 	<licenses>
     	<license>
-	     	<name>TODO</name>
+	     	<name>Eclipse Public License - v 2.0</name>
+	     	<url>https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt</url>
 	   </license>
   	</licenses>
   	

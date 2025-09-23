@@ -1,3 +1,18 @@
+/*******************************************************************************
+ *
+ * Copyright (c) 2025 AITIA
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ *
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *  	AITIA
+ *
+ *******************************************************************************/
 package ai.aitia.arrowhead.it2generichttp;
 
 public final class InterfaceTranslatorToGenericHTTPConstants {
@@ -19,13 +34,15 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 	public static final String TARGET_INTERFACE_SSL_ENABLED = "target.interface.ssl.enabled";
 	public static final String $TARGET_INTERFACE_SSL_ENABLED = "${" + TARGET_INTERFACE_SSL_ENABLED + ":#{null}}";
 	public static final String DATA_MODEL_TRANSLATOR_GET_RESULT_TRIES = "data.model.translator.get.result.tries";
-	public static final String $DATA_MODEL_TRANSLATOR_GET_RESULT_TRIES_WD = "${" + DATA_MODEL_TRANSLATOR_GET_RESULT_TRIES + ":10}";
+	public static final String $DATA_MODEL_TRANSLATOR_GET_RESULT_TRIES_WD = "${" + DATA_MODEL_TRANSLATOR_GET_RESULT_TRIES + ":"
+			+ InterfaceTranslatorToGenericHTTPDefaults.DATA_MODEL_TRANSLATOR_GET_RESULT_TRIES_DEFAULT + "}";
 	public static final String DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT = "data.model.translator.get.result.wait";
-	public static final String $DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT_WD = "${" + DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT + ":1000}";
+	public static final String $DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT_WD = "${" + DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT + ":"
+			+ InterfaceTranslatorToGenericHTTPDefaults.DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT_DEFAULT + "}";
 	public static final String BRIDGE_CLOSING_INTERVAL = "bridge.closing.interval";
-	public static final String $BRIDGE_CLOSING_INTERVAL_WD = "${" + BRIDGE_CLOSING_INTERVAL + ":60000}";
+	public static final String $BRIDGE_CLOSING_INTERVAL_WD = "${" + BRIDGE_CLOSING_INTERVAL + ":" + InterfaceTranslatorToGenericHTTPDefaults.BRIDGE_CLOSING_INTERVAL_DEFAULT + "}";
 	public static final String BRIDGE_INACTIVITY_THRESHOLD = "bridge.inactivity.threshold";
-	public static final String $BRIDGE_INACTIVITY_THRESHOLD_WD = "${" + BRIDGE_INACTIVITY_THRESHOLD + ":60}";
+	public static final String $BRIDGE_INACTIVITY_THRESHOLD_WD = "${" + BRIDGE_INACTIVITY_THRESHOLD + ":" + InterfaceTranslatorToGenericHTTPDefaults.BRIDGE_INACTIVITY_THRESHOLD_DEFAULT + "}";
 
 	public static final String HTTP_API_BASE_PATH = "/interface/translator";
 	public static final String HTTP_API_MONITOR_PATH = HTTP_API_BASE_PATH + "/monitor";

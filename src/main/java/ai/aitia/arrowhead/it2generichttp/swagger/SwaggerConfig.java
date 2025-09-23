@@ -1,3 +1,18 @@
+/*******************************************************************************
+ *
+ * Copyright (c) 2025 AITIA
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ *
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *  	AITIA
+ *
+ *******************************************************************************/
 package ai.aitia.arrowhead.it2generichttp.swagger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,7 +21,6 @@ import org.springframework.context.annotation.Configuration;
 import ai.aitia.arrowhead.it2generichttp.InterfaceTranslatorToGenericHTTPConstants;
 import ai.aitia.arrowhead.it2generichttp.InterfaceTranslatorToGenericHTTPSystemInfo;
 import eu.arrowhead.common.swagger.DefaultSwaggerConfig;
-import io.swagger.v3.oas.models.info.License;
 import jakarta.annotation.PostConstruct;
 
 @Configuration
@@ -28,13 +42,6 @@ public class SwaggerConfig extends DefaultSwaggerConfig {
 
 	//=================================================================================================
 	// assistant methods
-
-	//-------------------------------------------------------------------------------------------------
-	@Override
-	protected License apiLicence() {
-		// TODO: add real licence here
-		return super.apiLicence();
-	}
 
 	//-------------------------------------------------------------------------------------------------
 	@PostConstruct
