@@ -214,6 +214,14 @@ public class ManagementServiceValidation {
 				dataModelIdValidator.validateDataModelIdentifier(normalized.resultDataModelTranslator().toModelId());
 			}
 
+			if (normalized.inputDataModelRequirement() != null) {
+				dataModelIdValidator.validateDataModelIdentifier(normalized.inputDataModelRequirement());
+			}
+
+			if (normalized.resultDataModelRequirement() != null) {
+				dataModelIdValidator.validateDataModelIdentifier(normalized.resultDataModelRequirement());
+			}
+
 			interfaceTemplateNameValidator.validateInterfaceTemplateName(normalized.targetInterface());
 			serviceOpValidator.validateServiceOperationName(normalized.operation());
 		} catch (final InvalidParameterException ex) {
@@ -279,6 +287,8 @@ public class ManagementServiceValidation {
 				interfaceTemplateNameNormalizer.normalize(dto.inputInterface()),
 				normalizeDataModelTranslator(dto.inputDataModelTranslator()),
 				normalizeDataModelTranslator(dto.resultDataModelTranslator()),
+				Utilities.isEmpty(dto.inputDataModelRequirement()) ? null : dataModelIdNormalizer.normalize(dto.inputDataModelRequirement()),
+				Utilities.isEmpty(dto.resultDataModelRequirement()) ? null : dataModelIdNormalizer.normalize(dto.resultDataModelRequirement()),
 				interfaceTemplateNameNormalizer.normalize(dto.targetInterface()),
 				dto.targetInterfaceProperties(),
 				serviceOpNormalizer.normalize(dto.operation()),

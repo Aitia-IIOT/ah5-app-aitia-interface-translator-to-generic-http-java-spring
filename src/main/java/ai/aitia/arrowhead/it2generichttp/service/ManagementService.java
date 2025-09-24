@@ -37,6 +37,7 @@ import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.exception.ExternalServerError;
 import eu.arrowhead.common.exception.InternalServerError;
 import eu.arrowhead.common.exception.InvalidParameterException;
+import eu.arrowhead.common.http.model.HttpDataModelsOperationModel;
 import eu.arrowhead.common.http.model.HttpInterfaceModel;
 import eu.arrowhead.common.http.model.HttpOperationModel;
 import eu.arrowhead.common.intf.properties.PropertyValidatorType;
@@ -243,16 +244,27 @@ public class ManagementService {
 	private Map<String, Object> calculateInterfacePropertiesForGenericHTTP(final NormalizedTranslationBridgeModel model) {
 		logger.debug("calculateInterfacePropertiesForGenericHTTP started...");
 
-		final HttpInterfaceModel intfModel = new HttpInterfaceModel.Builder(model.inputInterface())
+		final HttpDataModelsOperationModel.Builder dataModelBuilder = new HttpDataModelsOperationModel.Builder();
+		if (!Utilities.isEmpty(model.inputDataModelRequirement())) {
+			dataModelBuilder.input(model.inputDataModelRequirement());
+		}
+		if (!Utilities.isEmpty(model.resultDataModelRequirement())) {
+			dataModelBuilder.output(model.resultDataModelRequirement());
+		}
+
+		final HttpInterfaceModel.Builder intfModelBuilder = new HttpInterfaceModel.Builder(model.inputInterface())
 				.accessAddress(sysInfo.getAddress())
 				.accessPort(sysInfo.getServerPort())
 				.basePath(InterfaceTranslatorToGenericHTTPConstants.HTTP_API_DYNAMIC_PATH)
 				.operation(model.operation(), new HttpOperationModel.Builder()
 						.method(HttpMethod.POST.name())
 						.path("/" + model.endpointId())
-						.build())
-				.build();
+						.build());
 
-		return intfModel.properties();
+		if (!Utilities.isEmpty(model.inputDataModelRequirement()) || !Utilities.isEmpty(model.resultDataModelRequirement())) {
+			intfModelBuilder.dataModel(model.operation(), dataModelBuilder.build());
+		}
+
+		return intfModelBuilder.build().properties();
 	}
 }
