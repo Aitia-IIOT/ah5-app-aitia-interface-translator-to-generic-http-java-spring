@@ -94,7 +94,7 @@ public class InterfaceTranslatorToGenericHTTPApplicationInitListener extends App
 				AuthorizationTargetType.SERVICE_DEF.name(),
 				Constants.SERVICE_DEF_INTERFACE_BRIDGE_MANAGEMENT,
 				"Only the Translation Manager should use this service",
-				new AuthorizationPolicyRequestDTO(AuthorizationPolicyType.WHITELIST.name(), List.of(sysInfo.getSystemName()), null),
+				new AuthorizationPolicyRequestDTO(AuthorizationPolicyType.WHITELIST.name(), List.of(Constants.SYS_NAME_TRANSLATION_MANAGER), null),
 				null);
 
 		arrowheadHttpService.consumeService(
