@@ -15,6 +15,7 @@
  *******************************************************************************/
 package ai.aitia.arrowhead.it2generichttp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +55,17 @@ public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
 
 	//-------------------------------------------------------------------------------------------------
 	@Override
+	public boolean isMqttApiEnabled() {
+		return false;
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	public boolean isMqttBridgeEnabled() {
+		return super.isMqttApiEnabled();
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	@Override
 	public SystemModel getSystemModel() {
 		if (systemModel == null) {
 			SystemModel.Builder builder = new SystemModel.Builder()
@@ -73,8 +85,11 @@ public class InterfaceTranslatorToGenericHTTPSystemInfo extends SystemInfo {
 	//-------------------------------------------------------------------------------------------------
 	@Override
 	public List<ServiceModel> getServices() {
-		final List<String> fromInterfaces = List.of(
-				isSslEnabled() ? Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME : Constants.GENERIC_HTTP_INTERFACE_TEMPLATE_NAME);
+		final List<String> fromInterfaces = new ArrayList<>(2);
+		fromInterfaces.add(isSslEnabled() ? Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME : Constants.GENERIC_HTTP_INTERFACE_TEMPLATE_NAME);
+		if (isMqttBridgeEnabled()) {
+			fromInterfaces.add(isSslEnabled() ? Constants.GENERIC_MQTTS_INTERFACE_TEMPLATE_NAME : Constants.GENERIC_MQTT_INTERFACE_TEMPLATE_NAME);
+		}
 		final String toInterface = getTargetInterface();
 
 		final ServiceModel interfaceBridgeManagement = new ServiceModel.Builder()

@@ -17,10 +17,15 @@ package ai.aitia.arrowhead.it2generichttp;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Function;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
+import ai.aitia.arrowhead.it2generichttp.api.mqtt.utils.DynamicMqttMessageContainerHandler;
+import eu.arrowhead.common.mqtt.model.MqttMessageContainer;
 import eu.arrowhead.dto.TranslationReportRequestDTO;
 
 @Configuration
@@ -33,5 +38,24 @@ public class BeanConfig {
 	@Bean(InterfaceTranslatorToGenericHTTPConstants.REPORT_QUEUE)
 	BlockingQueue<TranslationReportRequestDTO> getReportQueue() {
 		return new LinkedBlockingQueue<>();
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	@Bean(InterfaceTranslatorToGenericHTTPConstants.MQTT_BRIDGE_QUEUE)
+	BlockingQueue<MqttMessageContainer> getMqttBridgeQueue() {
+		return new LinkedBlockingQueue<>();
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	DynamicMqttMessageContainerHandler createDynamicMqttMessageContainerHandler(final MqttMessageContainer msgContainer) {
+		return new DynamicMqttMessageContainerHandler(msgContainer);
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	@Bean
+	Function<MqttMessageContainer, DynamicMqttMessageContainerHandler> dynamicMqttMessageContainerHandlerFactory() {
+		return container -> createDynamicMqttMessageContainerHandler(container);
 	}
 }
