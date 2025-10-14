@@ -151,7 +151,7 @@ public class DynamicMqttMessageContainerHandler implements Runnable {
 				request.getResponseTopic(),
 				request.getTraceId(),
 				request.getQosRequirement(),
-				calculateStatusFromExceptionType(exType),
+				calculateStatusFromExceptionType(exType).value(),
 				payload);
 	}
 
@@ -196,13 +196,13 @@ public class DynamicMqttMessageContainerHandler implements Runnable {
 			final String topic,
 			final String traceId,
 			final MqttQoS qos,
-			final MqttStatus status,
+			final int status,
 			final Object payload) {
 		logger.debug("response started");
 		Assert.isTrue(!Utilities.isEmpty(topic), "topic is empty");
 
 		try {
-			final MqttResponseTemplate template = new MqttResponseTemplate(status.value(), traceId, receiver, payload == null ? "" : payload);
+			final MqttResponseTemplate template = new MqttResponseTemplate(status, traceId, receiver, payload == null ? "" : payload);
 			final MqttMessage msg = new MqttMessage(mapper.writeValueAsBytes(template));
 			msg.setQos(qos == null ? Constants.MQTT_DEFAULT_QOS : qos.value());
 			client.publish(topic, msg);
@@ -240,7 +240,7 @@ public class DynamicMqttMessageContainerHandler implements Runnable {
 					request.getResponseTopic(),
 					request.getTraceId(),
 					request.getQosRequirement(),
-					MqttStatus.resolve(statusCode),
+					statusCode,
 					resultPayload);
 		}
 	}
