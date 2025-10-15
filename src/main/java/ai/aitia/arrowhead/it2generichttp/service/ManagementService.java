@@ -37,11 +37,12 @@ import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.exception.ExternalServerError;
 import eu.arrowhead.common.exception.InternalServerError;
 import eu.arrowhead.common.exception.InvalidParameterException;
-import eu.arrowhead.common.http.model.HttpDataModelsOperationModel;
+import eu.arrowhead.common.http.model.DataModelsOperationModel;
 import eu.arrowhead.common.http.model.HttpInterfaceModel;
 import eu.arrowhead.common.http.model.HttpOperationModel;
 import eu.arrowhead.common.intf.properties.PropertyValidatorType;
 import eu.arrowhead.common.intf.properties.PropertyValidators;
+import eu.arrowhead.common.mqtt.model.MqttInterfaceModel;
 import eu.arrowhead.dto.ServiceInstanceInterfaceResponseDTO;
 import eu.arrowhead.dto.TranslationBridgeInitializationRequestDTO;
 import eu.arrowhead.dto.TranslationCheckTargetsRequestDTO;
@@ -67,6 +68,9 @@ public class ManagementService {
 
 	@Autowired
 	private HttpEndpointHandler httpEndpointHandler;
+
+	@Autowired
+	private MqttEndpointHandler mqttEndpointHandler;
 
 	@Autowired
 	private InterfaceTranslatorToGenericHTTPSystemInfo sysInfo;
@@ -201,6 +205,7 @@ public class ManagementService {
 
 		return switch (interfaceName) {
 		case Constants.GENERIC_HTTP_INTERFACE_TEMPLATE_NAME, Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME -> httpEndpointHandler;
+		case Constants.GENERIC_MQTT_INTERFACE_TEMPLATE_NAME, Constants.GENERIC_MQTTS_INTERFACE_TEMPLATE_NAME -> mqttEndpointHandler;
 		default ->
 			throw new InternalServerError("Interface " + interfaceName + " is not supported");
 		};
@@ -224,6 +229,8 @@ public class ManagementService {
 		return switch (interfaceName) {
 		case Constants.GENERIC_HTTP_INTERFACE_TEMPLATE_NAME -> Constants.HTTP;
 		case Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME -> Constants.HTTPS;
+		case Constants.GENERIC_MQTT_INTERFACE_TEMPLATE_NAME -> Constants.TCP;
+		case Constants.GENERIC_MQTTS_INTERFACE_TEMPLATE_NAME -> Constants.SSL;
 		default ->
 			throw new InternalServerError("Interface " + interfaceName + " is not supported");
 		};
@@ -235,6 +242,7 @@ public class ManagementService {
 
 		return switch (model.inputInterface()) {
 		case Constants.GENERIC_HTTP_INTERFACE_TEMPLATE_NAME, Constants.GENERIC_HTTPS_INTERFACE_TEMPLATE_NAME -> calculateInterfacePropertiesForGenericHTTP(model);
+		case Constants.GENERIC_MQTT_INTERFACE_TEMPLATE_NAME, Constants.GENERIC_MQTTS_INTERFACE_TEMPLATE_NAME -> calculateInterfacePropertiesForGenericMQTT(model);
 		default ->
 			throw new InternalServerError("Interface " + model.inputInterface() + " is not supported");
 		};
@@ -244,7 +252,7 @@ public class ManagementService {
 	private Map<String, Object> calculateInterfacePropertiesForGenericHTTP(final NormalizedTranslationBridgeModel model) {
 		logger.debug("calculateInterfacePropertiesForGenericHTTP started...");
 
-		final HttpDataModelsOperationModel.Builder dataModelBuilder = new HttpDataModelsOperationModel.Builder();
+		final DataModelsOperationModel.Builder dataModelBuilder = new DataModelsOperationModel.Builder();
 		if (!Utilities.isEmpty(model.inputDataModelRequirement())) {
 			dataModelBuilder.input(model.inputDataModelRequirement());
 		}
@@ -260,6 +268,31 @@ public class ManagementService {
 						.method(HttpMethod.POST.name())
 						.path("/" + model.endpointId())
 						.build());
+
+		if (!Utilities.isEmpty(model.inputDataModelRequirement()) || !Utilities.isEmpty(model.resultDataModelRequirement())) {
+			intfModelBuilder.dataModel(model.operation(), dataModelBuilder.build());
+		}
+
+		return intfModelBuilder.build().properties();
+	}
+
+	//-------------------------------------------------------------------------------------------------
+	private Map<String, Object> calculateInterfacePropertiesForGenericMQTT(final NormalizedTranslationBridgeModel model) {
+		logger.debug("calculateInterfacePropertiesForGenericMQTT started...");
+
+		final DataModelsOperationModel.Builder dataModelBuilder = new DataModelsOperationModel.Builder();
+		if (!Utilities.isEmpty(model.inputDataModelRequirement())) {
+			dataModelBuilder.input(model.inputDataModelRequirement());
+		}
+		if (!Utilities.isEmpty(model.resultDataModelRequirement())) {
+			dataModelBuilder.output(model.resultDataModelRequirement());
+		}
+
+		final MqttInterfaceModel.Builder intfModelBuilder = new MqttInterfaceModel.Builder(model.inputInterface())
+				.accessAddress(sysInfo.getMqttBrokerAddress())
+				.accessPort(sysInfo.getMqttBrokerPort())
+				.baseTopic(InterfaceTranslatorToGenericHTTPConstants.MQTT_DYNAMIC_BASE_TOPIC_PREFIX + model.endpointId().toString() + "/")
+				.operation(model.operation());
 
 		if (!Utilities.isEmpty(model.inputDataModelRequirement()) || !Utilities.isEmpty(model.resultDataModelRequirement())) {
 			intfModelBuilder.dataModel(model.operation(), dataModelBuilder.build());

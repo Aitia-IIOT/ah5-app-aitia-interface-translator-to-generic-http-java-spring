@@ -25,6 +25,7 @@ public final class InterfaceTranslatorToGenericHTTPDefaults {
 	public static final String DATA_MODEL_TRANSLATOR_GET_RESULT_WAIT_DEFAULT = "1000";
 	public static final String BRIDGE_CLOSING_INTERVAL_DEFAULT = "60000";
 	public static final String BRIDGE_INACTIVITY_THRESHOLD_DEFAULT = "60";
+	public static final String MQTT_HANDLER_THREADS_DEFAULT = "5";
 
 	//=================================================================================================
 	// assistant methods

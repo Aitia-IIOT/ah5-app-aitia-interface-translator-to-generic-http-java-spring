@@ -1,6 +1,6 @@
 # Interface Translator Application (ah5-app-aitia-interface-translator-to-generic-http-java-spring)
 
-The current version (1.0.0) only support "translations" from generic_http/generic_https to generic_http/generic_https.
+The current version (1.0.0) support translations from generic_http/generic_https/generic_mqtt/generic_mqtts to generic_http/generic_https.
 
 ## How to Start the app
 
