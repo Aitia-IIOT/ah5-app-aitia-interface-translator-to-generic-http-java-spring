@@ -128,7 +128,7 @@ public class DynamicMqttMessageContainerHandler implements Runnable {
 	}
 
 	//-------------------------------------------------------------------------------------------------
-	public void errorResponse(final Exception ex, final MqttRequestModel request) {
+	private void errorResponse(final Exception ex, final MqttRequestModel request) {
 		logger.debug("errorResponse started...");
 
 		if (request == null) {

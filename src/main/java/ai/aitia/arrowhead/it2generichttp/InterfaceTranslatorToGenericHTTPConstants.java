@@ -62,7 +62,7 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 
 	public static final String MQTT_BRIDGE_BROKER_CONNECT_ID = "TRANSLATION-BRIDGE-" + UUID.randomUUID().toString();
 	public static final String MQTT_DYNAMIC_BASE_TOPIC_PREFIX = "arrowhead/interface/translator/dynamic/";
-	public static final String MQTT_BRIDGE_QUEUE = "mqttBridgetQueue";
+	public static final String MQTT_BRIDGE_QUEUE = "mqttBridgeQueue";
 	public static final String MQTT_ORIGINAL_MIME_TYPE = "application/json";
 
 	public static final String POLICY_TRANSLATION_BRIDGE_TOKEN_AUTH = "TRANSLATION_BRIDGE_TOKEN_AUTH";
