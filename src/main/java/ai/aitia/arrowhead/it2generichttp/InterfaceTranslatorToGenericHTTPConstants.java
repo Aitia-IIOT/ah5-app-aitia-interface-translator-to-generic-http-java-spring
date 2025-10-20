@@ -15,6 +15,8 @@
  *******************************************************************************/
 package ai.aitia.arrowhead.it2generichttp;
 
+import java.util.UUID;
+
 public final class InterfaceTranslatorToGenericHTTPConstants {
 
 	//=================================================================================================
@@ -43,6 +45,8 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 	public static final String $BRIDGE_CLOSING_INTERVAL_WD = "${" + BRIDGE_CLOSING_INTERVAL + ":" + InterfaceTranslatorToGenericHTTPDefaults.BRIDGE_CLOSING_INTERVAL_DEFAULT + "}";
 	public static final String BRIDGE_INACTIVITY_THRESHOLD = "bridge.inactivity.threshold";
 	public static final String $BRIDGE_INACTIVITY_THRESHOLD_WD = "${" + BRIDGE_INACTIVITY_THRESHOLD + ":" + InterfaceTranslatorToGenericHTTPDefaults.BRIDGE_INACTIVITY_THRESHOLD_DEFAULT + "}";
+	public static final String MQTT_HANDLER_THREADS = "mqtt.handler.threads";
+	public static final String $MQTT_HANDLER_THREADS_WD = "${" + MQTT_HANDLER_THREADS + ":" + InterfaceTranslatorToGenericHTTPDefaults.MQTT_HANDLER_THREADS_DEFAULT + "}";
 
 	public static final String HTTP_API_BASE_PATH = "/interface/translator";
 	public static final String HTTP_API_MONITOR_PATH = HTTP_API_BASE_PATH + "/monitor";
@@ -55,6 +59,11 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 	public static final String HTTP_PARAM_PATH_ID = "{pathId}";
 	public static final String HTTP_API_DYNAMIC_PATH = HTTP_API_BASE_PATH + "/dynamic";
 	public static final String HTTP_API_DYNAMIC_PATH_WITH_PARAM = HTTP_API_DYNAMIC_PATH + "/" + HTTP_PARAM_PATH_ID;
+
+	public static final String MQTT_BRIDGE_BROKER_CONNECT_ID = "TRANSLATION-BRIDGE-" + UUID.randomUUID().toString();
+	public static final String MQTT_DYNAMIC_BASE_TOPIC_PREFIX = "arrowhead/interface/translator/dynamic/";
+	public static final String MQTT_BRIDGE_QUEUE = "mqttBridgeQueue";
+	public static final String MQTT_ORIGINAL_MIME_TYPE = "application/json";
 
 	public static final String POLICY_TRANSLATION_BRIDGE_TOKEN_AUTH = "TRANSLATION_BRIDGE_TOKEN_AUTH";
 

@@ -20,6 +20,7 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.naming.ConfigurationException;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,8 @@ import ai.aitia.arrowhead.Constants;
 import ai.aitia.arrowhead.Defaults;
 import ai.aitia.arrowhead.it2generichttp.InterfaceTranslatorToGenericHTTPConstants;
 import ai.aitia.arrowhead.it2generichttp.InterfaceTranslatorToGenericHTTPSystemInfo;
+import ai.aitia.arrowhead.it2generichttp.api.mqtt.utils.DynamicMqttClient;
+import ai.aitia.arrowhead.it2generichttp.api.mqtt.utils.DynamicMqttTopicHandler;
 import ai.aitia.arrowhead.it2generichttp.report.ReportThread;
 import eu.arrowhead.common.Utilities;
 import eu.arrowhead.common.init.ApplicationInitListener;
@@ -52,6 +55,12 @@ public class InterfaceTranslatorToGenericHTTPApplicationInitListener extends App
 	@Resource(name = InterfaceTranslatorToGenericHTTPConstants.REPORT_QUEUE)
 	private BlockingQueue<TranslationReportRequestDTO> reportQueue;
 
+	@Autowired
+	private DynamicMqttClient mqttClient;
+
+	@Autowired
+	private DynamicMqttTopicHandler mqttTopicHandler;
+
 	//=================================================================================================
 	// assistant methods
 
@@ -61,6 +70,18 @@ public class InterfaceTranslatorToGenericHTTPApplicationInitListener extends App
 		logger.debug("customInit started...");
 
 		final InterfaceTranslatorToGenericHTTPSystemInfo info = (InterfaceTranslatorToGenericHTTPSystemInfo) sysInfo;
+		if (info.isMqttBridgeEnabled()) {
+			try {
+				mqttClient.initialize();
+			} catch (final MqttException ex) {
+				logger.error(ex.getMessage());
+				logger.debug(ex);
+				throw new ConfigurationException("Can't access the MQTT broker: " + ex.getMessage());
+			}
+
+			mqttTopicHandler.start();
+		}
+
 		if (info.isAuthorizationEnabled()) {
 			specifyAuthorizationPolicy();
 		}
@@ -70,6 +91,7 @@ public class InterfaceTranslatorToGenericHTTPApplicationInitListener extends App
 		}
 
 		reportThread.start();
+
 	}
 
 	//-------------------------------------------------------------------------------------------------
@@ -82,6 +104,17 @@ public class InterfaceTranslatorToGenericHTTPApplicationInitListener extends App
 			reportQueue.put(new TranslationReportRequestDTO(null, null, null, null));
 		} catch (final InterruptedException __) {
 			// intentionally blank
+		}
+
+		final InterfaceTranslatorToGenericHTTPSystemInfo info = (InterfaceTranslatorToGenericHTTPSystemInfo) sysInfo;
+		if (info.isMqttBridgeEnabled()) {
+			try {
+				mqttTopicHandler.interrupt();
+				mqttClient.destroy();
+			} catch (final MqttException ex) {
+				logger.error(ex.getMessage());
+				logger.debug(ex);
+			}
 		}
 	}
 
