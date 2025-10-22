@@ -55,10 +55,10 @@ public class InterfaceTranslatorToGenericHTTPApplicationInitListener extends App
 	@Resource(name = InterfaceTranslatorToGenericHTTPConstants.REPORT_QUEUE)
 	private BlockingQueue<TranslationReportRequestDTO> reportQueue;
 
-	@Autowired
+	@Autowired(required = false)
 	private DynamicMqttClient mqttClient;
 
-	@Autowired
+	@Autowired(required = false)
 	private DynamicMqttTopicHandler mqttTopicHandler;
 
 	//=================================================================================================
