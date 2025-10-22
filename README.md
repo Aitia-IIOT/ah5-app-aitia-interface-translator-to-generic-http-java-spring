@@ -1,6 +1,6 @@
 # InterfaceTranslatorToGenericHTTP
 
-This project provides an [interface translation provider](https://aitia-iiot.github.io/ah5-docs-java-spring/tools_assets/translation/translation_providers/#interface-translation-providers) for Eclipse Arrowhed 5th generation.
+This project provides an [interface translation provider](https://aitia-iiot.github.io/ah5-docs-java-spring/tools_assets/translation/translation_providers/#interface-translation-providers) for Eclipse Arrowhead 5th generation.
 
 ## Translation Capabilities
 
