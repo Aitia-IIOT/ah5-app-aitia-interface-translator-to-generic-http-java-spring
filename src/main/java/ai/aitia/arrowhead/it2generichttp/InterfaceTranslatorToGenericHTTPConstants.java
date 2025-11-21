@@ -22,9 +22,9 @@ public final class InterfaceTranslatorToGenericHTTPConstants {
 	//=================================================================================================
 	// members
 
-	public static final String SYSTEM_VERSION = "1.1.1";
+	public static final String SYSTEM_VERSION = "1.1.2";
 
-	public static final String VERSION_INTERFACE_BRIDGE_MANAGEMENT = "1.1.1";
+	public static final String VERSION_INTERFACE_BRIDGE_MANAGEMENT = "1.0.0";
 
 	public static final String AES_CBC_ALGORITHM_IV_BASED = "AES/CBC/PKCS5Padding"; // With initialization vector
 	public static final String KEY_INITIALIZATION_VECTOR = "authorization-initialization-vector";
