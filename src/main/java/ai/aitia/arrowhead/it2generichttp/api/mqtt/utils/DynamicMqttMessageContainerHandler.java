@@ -230,8 +230,8 @@ public class DynamicMqttMessageContainerHandler implements Runnable {
 		final int statusCode = result.getFirst();
 		Object resultPayload = null;
 		if (result.getSecond().isPresent()) {
-			byte[] resultBytes = extractResult(result.getSecond().get());
-			resultPayload = mapper.readValue(resultBytes, Object.class);
+			final byte[] resultBytes = extractResult(result.getSecond().get());
+			resultPayload = resultBytes == null ? null : mapper.readValue(resultBytes, Object.class);
 		}
 
 		if (!Utilities.isEmpty(request.getResponseTopic())) {
