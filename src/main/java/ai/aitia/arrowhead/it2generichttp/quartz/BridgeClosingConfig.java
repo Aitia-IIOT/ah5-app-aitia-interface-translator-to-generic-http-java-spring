@@ -22,20 +22,16 @@ import org.quartz.SimpleTrigger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
-import ai.aitia.arrowhead.Constants;
 import ai.aitia.arrowhead.it2generichttp.InterfaceTranslatorToGenericHTTPConstants;
-import eu.arrowhead.common.http.filter.authentication.AuthenticationPolicy;
 import jakarta.annotation.PostConstruct;
 
 @Configuration
 @EnableAutoConfiguration
-@ConditionalOnProperty(name = Constants.AUTHENTICATION_POLICY, havingValue = AuthenticationPolicy.OUTSOURCED_VALUE, matchIfMissing = false)
 public class BridgeClosingConfig {
 
 	//=================================================================================================
