@@ -89,6 +89,7 @@ public class DynamicMqttClient {
 		logger.debug("DynamicMqttClient.destroy started...");
 
 		if (sysInfo.isMqttBridgeEnabled()) {
+			client.disconnect();
 			client.close();
 			client = null;
 		}
